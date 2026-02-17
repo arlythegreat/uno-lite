@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>LDR UNO Lite</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <div id="opponent-hand" class="hand">Opponent's Cards (Hidden)</div>
+        
+        <div id="table">
+            <div id="deck" onclick="window.drawCard()">🎴<br>Draw</div>
+            <div id="discard-pile"></div>
+            <button id="reset-btn" onclick="window.resetGame()">New Game</button>
+        </div>
+
+        <div id="player-hand" class="hand"></div>
+        <div id="status">Your Turn!</div>
+    </div>
+   <script type="module" src="script.js"></script>
+</body>
+</html>
+
+
+
