@@ -30,6 +30,23 @@
     transition: transform 0.2s;
     color: white; /* Default text color */
 }
+
+/* --- THE MISSING COLORS START HERE --- */
+.red { background-color: #ff5555 !important; }
+.blue { background-color: #5555ff !important; }
+.green { background-color: #55aa55 !important; }
+.yellow { 
+    background-color: #ffaa00 !important; 
+    color: #333 !important; /* Dark text for yellow cards */
+}
+
+/* Card Hover Animation */
+.card:hover {
+    transform: translateY(-10px) scale(1.05);
+    z-index: 10;
+}
+/* --- THE MISSING COLORS END HERE --- */
+
 .card-back {
     background: #c0392b !important;
     background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(255,255,255,.1) 5px, rgba(255,255,255,.1) 10px);
@@ -44,7 +61,7 @@
     margin: 20px 0;
     min-height: 120px;
     flex-wrap: wrap;
-    max-width: 90%; /* Keeps cards from touching the screen edges */
+    max-width: 90%; 
     margin-left: auto;
     margin-right: auto;
 }
