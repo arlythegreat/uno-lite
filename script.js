@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getDatabase, ref, set, onValue, get } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyB58mgBHg0SvgSkvUHV44YHi7ZZ9gOHmbo",
@@ -20,7 +20,9 @@ const playerNum = urlParams.get('player');
 const myId = `player${playerNum}`;
 const opponentId = playerNum === "1" ? "player2" : "player1";
 
-// Toggle UI
+// ⚠️ UPDATED PATH: Points to your new high-quality back image
+const CARD_BACK = "card/opponent/opponent.png";
+
 if (playerNum) {
     document.getElementById('lobby-container').style.display = 'none';
     document.getElementById('game-container').style.display = 'block';
@@ -36,30 +38,29 @@ const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 let playerHand = [];
 let discardCard = null;
 let currentTurn = "1";
-let gameStarted = false; // Prevents re-initializing hand mid-game
+let gameStarted = false;
 
 function createCard() {
-    return {
+    let newCard = {
         color: colors[Math.floor(Math.random() * colors.length)],
         number: numbers[Math.floor(Math.random() * numbers.length)]
     };
+    // Card Guard: Skip yellow zero since it's missing from your folder
+    if (newCard.color === 'yellow' && newCard.number === 0) return createCard();
+    return newCard;
 }
 
-// Watch Firebase for changes
 onValue(ref(db, 'game'), (snapshot) => {
     const data = snapshot.val();
-    
     if (!data || !data.discardPile) {
         if (playerNum === "1" && !gameStarted) initGame();
         return;
     }
 
-    // Update global game state
     discardCard = data.discardPile;
     currentTurn = data.currentTurn;
     const oppCount = data[opponentId] ? data[opponentId].count : 0;
     
-    // First time joining? Give the player their starting hand
     if (!gameStarted && playerNum) {
         fillStartingHand();
         gameStarted = true;
@@ -69,7 +70,6 @@ onValue(ref(db, 'game'), (snapshot) => {
 });
 
 function initGame() {
-    // Shared game state initialization (Run by Player 1)
     set(ref(db, 'game/discardPile'), createCard());
     set(ref(db, 'game/currentTurn'), "1");
 }
@@ -95,7 +95,6 @@ window.drawCard = function() {
     }
     playerHand.push(createCard());
     updateMyCount();
-    
     const nextTurn = playerNum === "1" ? "2" : "1";
     set(ref(db, 'game/currentTurn'), nextTurn);
 };
@@ -106,7 +105,6 @@ window.playCard = function(index) {
         return;
     }
     const card = playerHand[index];
-    
     if (card.color === discardCard.color || card.number === discardCard.number) {
         const nextTurn = playerNum === "1" ? "2" : "1";
         set(ref(db, 'game/discardPile'), card);
@@ -124,6 +122,10 @@ function render(opponentCardCount) {
     const oppHandDiv = document.getElementById('opponent-hand');
     const discardDiv = document.getElementById('discard-pile');
     const statusDiv = document.getElementById('status');
+    const deckImg = document.querySelector('#deck img');
+
+    // Use the new opponent.png for the deck
+    if (deckImg) deckImg.src = CARD_BACK;
 
     statusDiv.innerText = (currentTurn === playerNum) ? "Your Turn! 🟢" : "Partner's Turn... 🔴";
     statusDiv.style.color = (currentTurn === playerNum) ? "#2ecc71" : "#e74c3c";
@@ -142,7 +144,8 @@ function render(opponentCardCount) {
     for(let i=0; i < opponentCardCount; i++) {
         const backEl = document.createElement('div');
         backEl.className = 'card';
-        backEl.innerHTML = `<img src="images/Uno card.jpg" width="100%" style="border-radius:8px">`;
+        // Use the new opponent.png for opponent's cards
+        backEl.innerHTML = `<img src="${CARD_BACK}" width="100%" style="border-radius:8px">`;
         oppHandDiv.appendChild(backEl);
     }
 
@@ -155,6 +158,6 @@ function render(opponentCardCount) {
 window.resetGame = function() {
     if (confirm("Reset game for both players?")) {
         gameStarted = false;
-        set(ref(db, 'game'), null); // Wipes Firebase data to trigger a fresh start
+        set(ref(db, 'game'), null);
     }
 };
