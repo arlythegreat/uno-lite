@@ -16,17 +16,15 @@
     </div>
 
     <div id="game-container" style="display: none;">
-        <div id="opponent-hand" class="hand">
-            </div>
+        <div id="opponent-hand" class="hand"></div>
         
         <div id="table">
             <div id="deck" onclick="window.drawCard()">
-                <img src="images/Uno card.jpg" alt="Deck" width="80">
+                <img src="card/opponent/opponent.png" alt="Deck" width="80">
                 <p>Draw Card</p>
             </div>
             
-            <div id="discard-pile">
-                </div>
+            <div id="discard-pile"></div>
 
             <div id="game-controls">
                 <button id="reset-btn" onclick="window.resetGame()">New Game</button>
@@ -34,8 +32,7 @@
         </div>
 
         <div id="status">Waiting for players...</div>
-        <div id="player-hand" class="hand">
-            </div>
+        <div id="player-hand" class="hand"></div>
     </div>
 
     <script type="module" src="script.js"></script>
