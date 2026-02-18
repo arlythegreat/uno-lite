@@ -2,25 +2,42 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LDR UNO Lite</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="game-container">
-        <div id="opponent-hand" class="hand">Opponent's Cards (Hidden)</div>
+    <div id="lobby-container">
+        <h1>LDR UNO Lite</h1>
+        <div class="lobby-buttons">
+            <button class="join-btn" onclick="window.location.search = '?player=1'">Host (Player 1)</button>
+            <button class="join-btn" onclick="window.location.search = '?player=2'">Join (Player 2)</button>
+        </div>
+    </div>
+
+    <div id="game-container" style="display: none;">
+        <div id="opponent-hand" class="hand">
+            </div>
         
         <div id="table">
-            <div id="deck" onclick="window.drawCard()">🎴<br>Draw</div>
-            <div id="discard-pile"></div>
-            <button id="reset-btn" onclick="window.resetGame()">New Game</button>
+            <div id="deck" onclick="window.drawCard()">
+                <img src="images/Uno card.jpg" alt="Deck" width="80">
+                <p>Draw Card</p>
+            </div>
+            
+            <div id="discard-pile">
+                </div>
+
+            <div id="game-controls">
+                <button id="reset-btn" onclick="window.resetGame()">New Game</button>
+            </div>
         </div>
 
-        <div id="player-hand" class="hand"></div>
-        <div id="status">Your Turn!</div>
+        <div id="status">Waiting for players...</div>
+        <div id="player-hand" class="hand">
+            </div>
     </div>
-   <script type="module" src="script.js"></script>
+
+    <script type="module" src="script.js"></script>
 </body>
 </html>
-
-
-
